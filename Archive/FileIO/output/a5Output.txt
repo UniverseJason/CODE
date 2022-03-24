@@ -1,0 +1,199 @@
+Assignment 5 created by Sam Silvestro (bkl740)
+
+ERROR: course already exists
+ERROR: invalid option
+ERROR: invalid option
+ERROR: invalid option
+ERROR: invalid option
+ERROR: course not found
+ERROR: course not found
+ERROR: invalid option
+ERROR: course not found
+Enter one of the following actions or type CTRL-D to exit.
+C - create a new course record
+R - read an existing course record
+U - update an existing course record
+D - delete an existing course record
+F - find course record by string
+Enter a course number: Course number: 1793
+Course name: Data Computation
+Scheduled days: TR
+Credit hours: 3
+Enrolled students: 65
+
+Enter one of the following actions or type CTRL-D to exit.
+C - create a new course record
+R - read an existing course record
+U - update an existing course record
+D - delete an existing course record
+F - find course record by string
+Enter a course number: Course number: 3443
+Course name: Application Programming
+Scheduled days: MWF
+Credit hours: 3
+Enrolled students: 57
+
+Enter one of the following actions or type CTRL-D to exit.
+C - create a new course record
+R - read an existing course record
+U - update an existing course record
+D - delete an existing course record
+F - find course record by string
+Enter a course number: Enter one of the following actions or type CTRL-D to exit.
+C - create a new course record
+R - read an existing course record
+U - update an existing course record
+D - delete an existing course record
+F - find course record by string
+Enter one of the following actions or type CTRL-D to exit.
+C - create a new course record
+R - read an existing course record
+U - update an existing course record
+D - delete an existing course record
+F - find course record by string
+Enter one of the following actions or type CTRL-D to exit.
+C - create a new course record
+R - read an existing course record
+U - update an existing course record
+D - delete an existing course record
+F - find course record by string
+Enter one of the following actions or type CTRL-D to exit.
+C - create a new course record
+R - read an existing course record
+U - update an existing course record
+D - delete an existing course record
+F - find course record by string
+Enter one of the following actions or type CTRL-D to exit.
+C - create a new course record
+R - read an existing course record
+U - update an existing course record
+D - delete an existing course record
+F - find course record by string
+Enter a course number: Course number: 3343
+Course name: Analysis of Algorithms
+Scheduled days: TR
+Credit hours: 3
+Enrolled students: 61
+
+Enter one of the following actions or type CTRL-D to exit.
+C - create a new course record
+R - read an existing course record
+U - update an existing course record
+D - delete an existing course record
+F - find course record by string
+Enter a course number: Enter a course name: Enter a course schedule (MWF or TR): Enter course credit hours: Enter student enrollment: Enter one of the following actions or type CTRL-D to exit.
+C - create a new course record
+R - read an existing course record
+U - update an existing course record
+D - delete an existing course record
+F - find course record by string
+Enter a course number: Course number: 3793
+Course name: Artificial Intelligence
+Scheduled days: MWF
+Credit hours: 3
+Enrolled students: 40
+
+Enter one of the following actions or type CTRL-D to exit.
+C - create a new course record
+R - read an existing course record
+U - update an existing course record
+D - delete an existing course record
+F - find course record by string
+Enter a course number: 1793 was successfully deleted.
+Enter one of the following actions or type CTRL-D to exit.
+C - create a new course record
+R - read an existing course record
+U - update an existing course record
+D - delete an existing course record
+F - find course record by string
+Enter a course number: Enter one of the following actions or type CTRL-D to exit.
+C - create a new course record
+R - read an existing course record
+U - update an existing course record
+D - delete an existing course record
+F - find course record by string
+Enter a course number: Enter one of the following actions or type CTRL-D to exit.
+C - create a new course record
+R - read an existing course record
+U - update an existing course record
+D - delete an existing course record
+F - find course record by string
+Enter one of the following actions or type CTRL-D to exit.
+C - create a new course record
+R - read an existing course record
+U - update an existing course record
+D - delete an existing course record
+F - find course record by string
+Enter a course number: Course number: 3424
+Course name: Systems Programming
+Scheduled days: MWF
+Credit hours: 4
+Enrolled students: 73
+
+Enter one of the following actions or type CTRL-D to exit.
+C - create a new course record
+R - read an existing course record
+U - update an existing course record
+D - delete an existing course record
+F - find course record by string
+Enter a course number: Enter a course name: Enter a course schedule (MWF or TR): Enter course credit hours: Enter student enrollment: Enter one of the following actions or type CTRL-D to exit.
+C - create a new course record
+R - read an existing course record
+U - update an existing course record
+D - delete an existing course record
+F - find course record by string
+Enter a course number: Enter a course name: Enter a course schedule (MWF or TR): Enter course credit hours: Enter student enrollment: Enter one of the following actions or type CTRL-D to exit.
+C - create a new course record
+R - read an existing course record
+U - update an existing course record
+D - delete an existing course record
+F - find course record by string
+Enter a course number: Enter a course name: Enter a course schedule (MWF or TR): Enter course credit hours: Enter student enrollment: Enter one of the following actions or type CTRL-D to exit.
+C - create a new course record
+R - read an existing course record
+U - update an existing course record
+D - delete an existing course record
+F - find course record by string
+Enter a course number: Course number: 4643
+Course name: Cellular and Mobile Technologies
+Scheduled days: MWF
+Credit hours: 3
+Enrolled students: 56
+
+Enter one of the following actions or type CTRL-D to exit.
+C - create a new course record
+R - read an existing course record
+U - update an existing course record
+D - delete an existing course record
+F - find course record by string
+Enter a course number: Enter a course name: Enter a course schedule (MWF or TR): Enter course credit hours: Enter student enrollment: Enter one of the following actions or type CTRL-D to exit.
+C - create a new course record
+R - read an existing course record
+U - update an existing course record
+D - delete an existing course record
+F - find course record by string
+Enter a course number: Course number: 2193
+Course name: Computer Organization
+Scheduled days: TR
+Credit hours: 3
+Enrolled students: 52
+
+Enter one of the following actions or type CTRL-D to exit.
+C - create a new course record
+R - read an existing course record
+U - update an existing course record
+D - delete an existing course record
+F - find course record by string
+Enter a course number: 2193 was successfully deleted.
+Enter one of the following actions or type CTRL-D to exit.
+C - create a new course record
+R - read an existing course record
+U - update an existing course record
+D - delete an existing course record
+F - find course record by string
+Enter a course number: Enter one of the following actions or type CTRL-D to exit.
+C - create a new course record
+R - read an existing course record
+U - update an existing course record
+D - delete an existing course record
+F - find course record by string

@@ -1,0 +1,36 @@
+c
+1793
+Data Computation
+TR
+3
+65
+c
+2193
+Computer Organization
+TR
+3
+52
+c
+3113
+Principles of Cyber Security
+MWF
+3
+59
+c
+3424
+Systems Programming
+MWF
+4
+73
+c
+3343
+Analysis of Algorithms
+TR
+3
+61
+c
+3443
+Application Programming
+MWF
+3
+57

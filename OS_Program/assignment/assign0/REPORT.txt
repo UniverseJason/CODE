@@ -1,0 +1,16 @@
+ycy354 Jiaxing Li report
+
+1 - I am the only person working on this project.
+2 - Everything should be correct, I test the features and all of them work as expected
+
+The part take most time of me is the number 7, at first I 
+try to search the max and delete the node at the same time.
+But I found out that I could only find the max until the end of the
+while loop, so that I could use this max number to delete the node form 
+the linked list.
+
+Then one part that also I do not like is when C read a double,
+I can not use the scanf directly. seems the buffer will remain in the
+stdout and the next ReadLine() function will skip the read name part. I create
+a new buffer called numbuff to store the double information and then read this 
+buffer by sscanf() form the buffer, and I believe there might be a better solution.

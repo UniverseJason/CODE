@@ -1,0 +1,65 @@
+Jiaxings-Air:assign2 jason$ make
+gcc -Wall -g -c prog.c
+gcc -Wall -g -o prog prog.o progFunction.o
+Jiaxings-Air:assign2 jason$ ./prog -input input.txt -alg RR -quantum 5
+Process 1 is completed at 5 ms
+Process 4 is completed at 9 ms
+Process 2 is completed at 11 ms
+Process 3 is completed at 12 ms
+Average Waiting time = 11.25 ms         (45/4)
+Average Turnaround time = 16.75 ms      (67/4)
+Throughput = 0.18 jobs per ms           (4/22)
+
+Jiaxings-Air:assign2 jason$ ./prog -input input.txt -alg FIFO
+Process 1 is completed at 5 ms
+Process 2 is completed at 12 ms
+Process 3 is completed at 18 ms
+Process 4 is completed at 22 ms
+Average Waiting time = 8.75 ms          (35/4)
+Average Turnaround time = 14.25 ms      (57/4)
+Throughput = 0.18 jobs per ms           (4/22)
+
+Jiaxings-Air:assign2 jason$ ./prog -input input.txt -alg PR
+Process 4 is completed at 4 ms
+Process 2 is completed at 7 ms
+Process 1 is completed at 5 ms
+Process 3 is completed at 6 ms
+Average Waiting time = 7.75 ms          (31/4)
+Average Turnaround time = 13.25 ms      (53/4)
+Throughput = 0.18 jobs per ms           (4/22)
+
+Jiaxings-Air:assign2 jason$ ./prog -input input.txt -alg SJF
+Process 4 is completed at 4 ms
+Process 1 is completed at 5 ms
+Process 3 is completed at 6 ms
+Process 2 is completed at 7 ms
+Average Waiting time = 7.00 ms          (28/4)
+Average Turnaround time = 12.50 ms      (50/4)
+Throughput = 0.18 jobs per ms           (4/22)
+
+Jiaxings-Air:assign2 jason$ ./prog -input inpuwt.txt -alg SJF
+ERROR: can not open the file.
+
+Jiaxings-Air:assign2 jason$ ./prog -input input.txt
+ERROR: incorrect number of argument.
+Usage: /prog -alg [FIFO|SJF|PR|RR] [-quantum integer(ms)] -input [input_file_name.txt]
+
+Jiaxings-Air:assign2 jason$ ./prog -input input.txt -alg FIFO
+Process 1 is completed at 5 ms
+Process 2 is completed at 12 ms
+Process 3 is completed at 18 ms
+Process 4 is completed at 22 ms
+Average Waiting time = 8.75 ms          (35/4)
+Average Turnaround time = 14.25 ms      (57/4)
+Throughput = 0.18 jobs per ms           (4/22)
+
+Jiaxings-Air:assign2 jason$ ./prog -alg RR -quantum 3 -input input.txt 
+Process 1 is completed at 2 ms
+Process 3 is completed at 5 ms
+Process 4 is completed at 6 ms
+Process 2 is completed at 7 ms
+Average Waiting time = 13.75 ms         (55/4)
+Average Turnaround time = 19.25 ms      (77/4)
+Throughput = 0.18 jobs per ms           (4/22)
+
+Jiaxings-Air:assign2 jason$ 

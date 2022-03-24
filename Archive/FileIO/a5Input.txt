@@ -1,0 +1,61 @@
+r
+1793
+r
+3443
+c
+3424
+Systems Programming
+MWF
+3
+82
+r
+3343
+c
+3793
+Artificial Intelligence
+MWF
+3
+40
+r
+3793
+d
+1793
+u
+9999
+r
+4653
+q
+r
+3424
+u
+3343
+Analysis of Algorithms
+TR
+3
+75
+c
+4643
+cellular and mobile technology
+MWF
+3
+56
+u
+4643
+Cellular and Mobile Technologies
+
+
+
+r
+4643
+u
+3424
+
+
+
+
+r
+2193
+d
+2193
+r
+2193

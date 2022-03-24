@@ -1,0 +1,37 @@
+1. Which lines of code correspond to the for loop of foo?
+
+.L3:
+	mov	eax, DWORD PTR [ebp-4]
+	mov	DWORD PTR [ebp-56+eax*4], 5
+	add	DWORD PTR [ebp-4], 1
+.L2:
+	cmp	DWORD PTR [ebp-4], 12
+	jle	.L3
+	mov	eax, DWORD PTR [ebp-4]
+	leave
+	ret
+
+2. Which register is used to hold the variable i of foo?
+eax register hold the variable i 
+Reason: mov	eax, DWORD PTR [ebp-4] load the mamory address [ebp-4] to the register eax.
+
+3. What is the memory address of the variable i of foo?
+[ebp-4]
+
+4. What is the beginning address of array B?
+[ebp-56]
+
+From:
+[ebp-56+eax*4] (B[i]) and eax*4 is [i], so the [ebp-56] is the beginning address.
+
+5. What is the addressing mode for the constant BUF_SIZE when it is used as loop bound?
+Immediate Mode, since number is encode in the instruction.
+
+6. What is the addressing mode for the constant 5?
+Immediate Mode
+
+7. What is the addressing mode used to access each element of B in the loop?
+Scaled Mode since eax*4 is the Scaled
+
+8. What does the code on line 9 (“sub esp, 64”) do?
+subtracts 64 bytes from register "esp", provided space for other variable.
