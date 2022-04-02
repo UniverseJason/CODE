@@ -40,14 +40,19 @@ int main(int argc, char* argv[])
     }
 
     // read file and get the corresponding LA and PA
+    i = 0;
     while( fread(&LA, sizeof(LA), 1, inFile) != 0 )
     {
         dnum = LA & 0x7F;
         pnum = LA >> d;
         fnum = PT[pnum];
         PA = (fnum << d) + dnum;
-        printf("The LA is %-4lx and Translated PA is %-4lx\n", LA, PA);
+        fwrite(&PA, sizeof(PA), 1, outFile);
+        i++;
     }
 
+    printf("Total number of page is %d\n", i);
+    
+    fclose(outFile);
     return EXIT_SUCCESS;
 }

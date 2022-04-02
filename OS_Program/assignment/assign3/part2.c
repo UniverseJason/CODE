@@ -51,11 +51,11 @@ int LRU_find(int *numlist, int length)
 
 int main(int argc, char *argv[])
 {
-    // if(argc < 3)
-    // {
-    //     fprintf(stderr, "Usage: ./part1 infile outfile.\n");
-    //     return 1;
-    // }
+    if(argc < 3)
+    {
+        fprintf(stderr, "Usage: ./part1 infile outfile.\n");
+        return 1;
+    }
 
     unsigned long LA, PA;
     unsigned int p=5, f=3, d=7;
@@ -80,13 +80,13 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    // // open the writefile
-    // FILE *outFile = fopen(argv[2], "wb");
-    // if(outFile == NULL)
-    // {
-    //     fprintf(stderr, "ERROR: can not open write the file\n");
-    //     exit(EXIT_FAILURE);
-    // }
+    // open the writefile
+    FILE *outFile = fopen(argv[2], "wb");
+    if(outFile == NULL)
+    {
+        fprintf(stderr, "ERROR: can not open write the file\n");
+        exit(EXIT_FAILURE);
+    }
 
     // read file and get the corresponding LA and PA
     int x = 0;
@@ -103,7 +103,6 @@ int main(int argc, char *argv[])
             fnum = PT[pnum].pt_fnum;
             PA = (fnum << d) + dnum;
             LRUcount[fnum] = CLK;
-            // printf("The LA is %-4lx and Translated PA is %-4lx\n", LA, PA); // need write here
         }
         else
         {
@@ -117,7 +116,6 @@ int main(int argc, char *argv[])
                 PA = (fnum << d) + dnum;
                 revmap[x] = pnum;
                 LRUcount[fnum] = CLK;
-                // printf("The LA is %-4lx and Translated PA is %-4lx\n", LA, PA); // need write here
             }
             else // no empty frame, run LRU
             {
@@ -129,11 +127,13 @@ int main(int argc, char *argv[])
                 PA = (fnum << d) + dnum;
                 LRUcount[fnum] = CLK;
                 revmap[fnum] = pnum;
-                // printf("The LA is %-4lx and Translated PA is %-4lx\n", LA, PA); // need write here
             }
         }
+        fwrite(&PA, sizeof(PA), 1, outFile);
     }
 
-    printf("%d\n", page_fault);
-    return 0;
+    printf("Part 2 page faults: %d\n", page_fault);
+    fclose(outFile);
+
+    return EXIT_SUCCESS;
 }

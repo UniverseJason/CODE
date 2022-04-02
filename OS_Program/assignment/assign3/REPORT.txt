@@ -1,0 +1,16 @@
+Jiaxing Li (ycy354) report
+
+I am the only person who work on this project, only with the help from the posted lecture on the BB.
+
+I think Everything should work since all the part1 and part2 have the same md5sum check with the answer provided online.
+
+The issue I encountered during the assignment is that when I working on the function:
+
+    int find_empty_frame(int *numlist, int length)
+
+I did not updated the frame as shown:
+
+    numlist[i] = 0;
+
+Thus I keep getting 32 page fault form the output. But I finally fixed this part and now the code will find a freeframe correctely
+
