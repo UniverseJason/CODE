@@ -14,7 +14,7 @@
  * Usage: student_cell_T *element;
  *        element = NewStudentCell(int id, double gpa, char *name);
  * --------------------------
- * This function allocates space for a student cell and intilize its fileds
+ * This function allocates space for a student cell and initialize its filedes
  */
 student_cell_T *NewStudentCell(int id, double gpa, char *name)
 {

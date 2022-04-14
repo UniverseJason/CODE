@@ -89,6 +89,8 @@ int main()
     pthread_join(tid, &value);
     d = *(double *)value;
 
+    
+
 
     return 0;
 }
