@@ -4,16 +4,16 @@ Rental(rentalId, (custNr), (propId), startDt, EndDt, totalCost)
 
 
 1. (1 pt) Find the propId, ownerNm, and state for properties with a propType equal to TRADITIONAL.
-
 PROPERTY [propType = "TRADITIONAL"] [propId, ownerNm, state]
 
 2. (1 pt) Find the propId and startDt for properties which the customer named Ava Kashun has a rental.
-PROPERTY [ownerNm = "Ava Kashun"] [propId, startDt]
+(CUSTOMER [name = "Ava Kashun"] [custNr = custNr] PROPERTY) [propId, startDt]
 
-3. (3 pts) Find the property ID and ownerNm of properties in TX (state) which start after "2019-11-03" for the customer named "Perry Scope".
+3. (3 pts) Find the property ID and ownerNm of properties in TX (state) which start after startDt "2019-11-03" for the customer named "Perry Scope".
+(CUSTOMER [name = "Perry Scope"] [propId = propId] PROPERTY) [state = "TX"] [propId, ownerNm]
 
-4. (3 pts) Find the customer numbers and names of customers who have a rental start after "2019-11-04" for a property which customer #444 also had a rental.  
-           Do not include #444 in your result.  Hint:  you will have to use one of the relations twice.
+4. (3 pts) Find the customer numbers and names of customers who have a rental start after "2019-11-04" for a property which customer #444 also had a rental.
+
 
 5. (3 pt) Find the customer number of customers who have rented all of the properties having a state of "CO". 
 
