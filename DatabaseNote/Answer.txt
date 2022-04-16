@@ -1,0 +1,32 @@
+Customer(custNr, name, baseLoc, birthDt, gender)
+Property (propId, ownerNm, propType, state, city, locDesc)
+Rental(rentalId, (custNr), (propId), startDt, EndDt, totalCost)
+
+
+1. (1 pt) Find the propId, ownerNm, and state for properties with a propType equal to TRADITIONAL.
+Property [propType = "TRADITIONAL"] [propId, ownerNm, state]
+
+2. (1 pt) Find the propId and startDt for properties which the customer named Ava Kashun has a rental.
+((Customer [name = "Ava Kashun"] [custNr = custNr]) Rental [propId = propId] Property) [propId, startDt]
+
+3. (3 pts) Find the property ID and ownerNm of properties in TX (state) which start after startDt "2019-11-03" for the customer named "Perry Scope".
+((Customer [name = "Perry Scope"] [custNr = custNr]) Rental [startDt > "2019-11-03"] [propId = propId] Property) [state = "TX"] [propId, ownerNm]
+
+4. (3 pts) Find the customer numbers and names of customers who have a rental start after "2019-11-04" for a property which customer #444 also had a rental.
+((Rental [custNr = "444" ^ startDt > "2019-11-04"] [propId] [propId = propId] Rental) [propId = propId] Property) [custNr, name]
+
+5. (3 pt) Find the customer number of customers who have rented all of the properties having a state of "CO". 
+(( Rental [custNr, propId] [propId / propId] (Property [state = "CO"] [propId]) ) [custNr = custNr] Customer) [custNr]
+
+6.  (4 pts) Find the name, gender, and birth date of customers who only rent properties with a state equal to "CO".
+(Property [propId] - ((Property [state <> "CO"] [propId = propId] Rental) [custNr]) [custNr = custNr] Customer) [name, gender, birthDt]
+
+7.  (4.5 pts) Find the propId and ownerNm for properties which only customer #777 has a rental.  State whether your answer includes properties that don't have any associated rentals.
+(Customer [custNr] - ((Customer [custNr <> "777"] [custNr = custNr] Rental) [custNr]) [propId = propId] Property) [propId, ownerNm]
+Answer do not includes properties that don't have any associated since we subtract the Customer from Customer Database if the custNr is not 777.
+
+8. (6 pts) Find the names of customers who have rented all the properties which Penny Lane has rented.  State whether you included Penny Lane in your answer.
+Rental [custNr, propId] [propId / propId] (Property [ownerNm = "Penny Lane"] [propId]) [custNr = custNr] Customer [name]
+
+9.  (4.5 pts) Find the customer number, names, and birth date for customers who have not ever rented a property with a state equal to "CO".
+(Customer [custNr] - (Property [state = "CO"] [propId = propId] Rental) [custNr = custNr] Customer) [custNr, name, birthDt]

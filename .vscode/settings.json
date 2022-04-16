@@ -1,4 +1,0 @@
-{
-    "lldb.showDisassembly": "auto",
-    "lldb.dereferencePointers": true
-}
