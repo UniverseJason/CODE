@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
     free(dataRet);
 
     // print out the elapsed time
-    printf("Sorting is done in %lf ms when one thread is used\n", elapsed);
+    printf("Sorting is done in %lf ms when one thread is used\n", (elapsed * 1000));
 
 
     // Afirsthalf and AsecondHalf with the half size of A, and the final array
@@ -207,7 +207,7 @@ int main(int argc, char *argv[])
     elapsed += (ts_end.tv_nsec - ts_begin.tv_nsec) / 1000000000.0;
 
     // print out the elapsed time
-    printf("Sorting is done in %lf ms when two threads are used\n", elapsed);
+    printf("Sorting is done in %lf ms when two threads are used\n", (elapsed * 1000));
 
     // free all
     free(pArrayData);

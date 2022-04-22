@@ -1,0 +1,39 @@
+Jiaxing Li(ycy354)report, and I am the only one who do this project
+
+From C:
+jason@DESKTOP-GARGF4H:~/MyWorkSpace/CODE/OS_Program/assignment/assign4$ ./a.out 1000
+Sorting is done in 1.564100 ms when one thread is used
+Sorting is done in 0.644100 ms when two threads are used
+
+jason@DESKTOP-GARGF4H:~/MyWorkSpace/CODE/OS_Program/assignment/assign4$ ./a.out 5000
+Sorting is done in 23.321900 ms when one thread is used
+Sorting is done in 6.105900 ms when two threads are used
+
+jason@DESKTOP-GARGF4H:~/MyWorkSpace/CODE/OS_Program/assignment/assign4$ ./a.out 10000
+Sorting is done in 88.938900 ms when one thread is used
+Sorting is done in 22.749000 ms when two threads are used
+
+jason@DESKTOP-GARGF4H:~/MyWorkSpace/CODE/OS_Program/assignment/assign4$ ./a.out 20000
+Sorting is done in 353.344100 ms when one thread is used
+Sorting is done in 89.161700 ms when two threads are used
+
+
+For Java in IDEA:
+C:\Users\01120\IdeaProjects\MutiThreadSorting\out\production\MutiThreadSorting Main 1000
+Sorting is done in 3.8108999999999997 ms when one thread is used
+Sorting is done in 0.7946 ms when two threads are used
+
+C:\Users\01120\IdeaProjects\MutiThreadSorting\out\production\MutiThreadSorting Main 5000
+Sorting is done in 18.356299999999997 ms when one thread is used
+Sorting is done in 4.6113 ms when two threads are used
+
+C:\Users\01120\IdeaProjects\MutiThreadSorting\out\production\MutiThreadSorting Main 10000
+Sorting is done in 64.6683 ms when one thread is used
+Sorting is done in 15.864799999999999 ms when two threads are used
+
+C:\Users\01120\IdeaProjects\MutiThreadSorting\out\production\MutiThreadSorting Main 20000
+Sorting is done in 255.1249 ms when one thread is used
+Sorting is done in 61.6406 ms when two threads are used
+
+I could see there is a big difference between one and two thread. The algro gained improvement through the muti thread. But before I fix the problem in C (I did not pass the size n in the struct, now I added it in the struct), it keep getting seg fault, and in Java it do not have this problem since it is easier to use thread.
+Through coding, Java is easier to implement since it could pass the class to the thread, and the way C did is kind of long and complicated. But I could see that the struct is just another "low level" class and basically have the same function in this project.
