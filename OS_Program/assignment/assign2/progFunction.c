@@ -229,7 +229,7 @@ PCB_st *Get_next_item_SJF_or_PR(char flag)
             target = temp;
             prev_i = prev;
         }
-        else if(flag == 'p' && temp->ProcPR >= target->ProcPR) // founded a larger PR
+        else if(flag == 'p' && temp->ProcPR > target->ProcPR) // founded a larger PR
         {
             target = temp;
             prev_i = prev;
