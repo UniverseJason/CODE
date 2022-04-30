@@ -1,16 +1,16 @@
 CC = gcc
-CFLAGS = -Wall -g
+CFLAGS = -Wall -g -pthread
 
 all: prog
 
 clean:
 	rm -f prog *.o
 
-progFunctionThd.o: progFunctionThd.c progFunctionThd.h
-	$(CC) $(CFLAGS) -c progFunctionThd.c
+linkedList.o: linkedList.c linkedList.h
+	$(CC) $(CFLAGS) -c linkedList.c
 
-prog.o: prog.c progFunctionThd.h
+prog.o: prog.c linkedList.h
 	$(CC) $(CFLAGS) -c prog.c
 
-prog: progFunctionThd.o prog.o
-	$(CC) $(CFLAGS) -o prog prog.o progFunctionThd.o
+prog: linkedList.o prog.o
+	$(CC) $(CFLAGS) -o prog prog.o linkedList.o

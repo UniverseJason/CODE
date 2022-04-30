@@ -17,10 +17,10 @@ PCB_st *tail = NULL;
 */
 PCB_st *newPCBnode(int pid, int pr, int numCPU, int numIO, int *CPU, int *IO)
 {
-    PCB_st *pcb = (PCB_st*)malloc( sizeof(PCB_st) );
+    PCB_st *pcb = (PCB_st*)malloc(sizeof(PCB_st));
     if(!pcb)
     {
-        fprintf(stderr,"ERROR: newPCB cannot allocate memory\n");
+        fprintf(stderr,"ERROR: newPCB node cannot allocate memory\n");
         return NULL;
     }
 
