@@ -22,5 +22,7 @@ PCB_st *newPCBlist();
 void addNewPCB(PCB_st* pcb_list, PCB_st* node);
 void freeList(PCB_st *list);
 void printLL(PCB_st *list);
+int isEmpty(PCB_st *list);
+PCB_st *removeHead(PCB_st *list);
 
 #endif

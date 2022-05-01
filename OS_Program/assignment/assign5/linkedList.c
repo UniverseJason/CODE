@@ -2,9 +2,6 @@
 #include <stdlib.h>
 #include "linkedList.h"
 
-PCB_st *head = NULL;
-PCB_st *tail = NULL;
-
 /*
     This function will create a new node of the double linked list
 @ param:
@@ -51,39 +48,31 @@ PCB_st *newPCBnode(int pid, int pr, int numCPU, int numIO, int *CPU, int *IO)
 */
 PCB_st *newPCBlist()
 {
-    PCB_st *pcb_list = (PCB_st*)malloc( sizeof(PCB_st) );
-    if(!pcb_list)
+    PCB_st *list = (PCB_st*)malloc(sizeof(PCB_st));
+    if(!list)
     {
         fprintf(stderr,"ERROR: newPCBlist cannot allocate memory\n");
         return NULL;
     }
 
-    head = NULL;
-    tail = NULL;
+    list->next = NULL;
+    list->prev = NULL;
 
-    return pcb_list;
+    return list;
 }
 
 /*
-    this function will add a new node to the double linked list
+    this function will add a new node to the end of the double linked list
 */
 void addNewPCB(PCB_st* pcb_list, PCB_st* node)
 {
-    if(head == NULL)
+    PCB_st *temp = pcb_list;
+    while(temp->next != NULL)
     {
-        head = node;
-        tail = node;
+        temp = temp->next;
     }
-    else
-    {
-        while(tail->next != NULL)
-        {
-            tail = tail->next;
-        }
-        tail->next = node;
-        node->prev = tail;
-        tail = node;
-    }
+    temp->next = node;
+    node->prev = temp;
 }
 
 /*
@@ -91,19 +80,19 @@ void addNewPCB(PCB_st* pcb_list, PCB_st* node)
 */
 void freeList(PCB_st *list)
 {
-    PCB_st *temp;
-
-    if(head == NULL)
+    if(isEmpty(list))
     {
+        fprintf(stderr,"ERROR: freeList cannot free an empty list\n");
         return;
     }
-    while(head != NULL)
+
+    PCB_st *temp = list;
+    while(temp->next != NULL)
     {
-        temp = head;
-        head = list->next;
-        free(temp);
+        temp = temp->next;
+        free(temp->prev);
     }
-    free(list);
+    free(temp);
 }
 
 /*
@@ -111,15 +100,46 @@ void freeList(PCB_st *list)
 */
 void printLL(PCB_st *list)
 {
-    PCB_st *temp = head;
-    if(head == NULL)
+    if(isEmpty(list))
     {
-        fprintf(stderr, "WARNING: list is empty, can not print\n");
+        fprintf(stderr,"ERROR: printLL cannot print empty list\n");
         return;
     }
-    while (temp != NULL)
+
+    PCB_st *temp = list;
+    while(temp->next != NULL)
     {
-        fprintf(stdout, "ID: %d PR: %d\n", temp->ProcId, temp->ProcPR);
         temp = temp->next;
+        printf("ID: %d, PR: %d, CPU: %d, IO: %d\n", temp->ProcId, temp->ProcPR, temp->numCPUBurst, temp->numIOBurst);
     }
+}
+
+/*
+    this function will check if the list is empty
+*/
+int isEmpty(PCB_st *list)
+{
+    if(list->next == NULL)
+        return 1;
+    else
+        return 0;
+}
+
+/* 
+    this function will remove and free the head node of the double linked list
+*/
+PCB_st *removeHead(PCB_st *list)
+{
+    if(isEmpty(list))
+    {
+        return NULL;
+    }
+    
+    PCB_st *newHead = list->next;
+    newHead->prev = NULL;
+
+    PCB_st *oldHead = list;
+    free(oldHead);
+
+    return newHead;
 }

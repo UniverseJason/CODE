@@ -1,0 +1,63 @@
+void *cpuSchedule(void *arg)
+{
+    struct timespec ts;
+    ts.tv_sec = 5;
+    ts.tv_nsec = 0;
+
+    // get the mainData struct
+    mainData data = *((mainData*)arg);
+    mainData *data_ptr = (mainData*)arg;
+
+    printf("1 file read done: %d\n", data.file_read_done);
+    sem_wait(&data.sem_cpu);
+    printf("2 file read done: %d\n", data.file_read_done);
+
+    while(true)
+    {
+        if(isEmpty(data.ready_queue) == 1 && data.io_busy == 0 && data.cpu_busy == 0 && data.file_read_done == 1) break;
+
+        if(data.algoFlag == FIFO)
+        {
+            int res = sem_timedwait(&data.sem_cpu, &ts);
+            if(res == -1 && errno == ETIMEDOUT) continue;
+            
+            // simulate the CPU burst
+            data.cpu_busy = 1;
+            PCB_st *pcbNode = removeHead(data.ready_queue);
+
+            usleep(pcbNode->CPUBurst[pcbNode->cpuIndex] * 1000);
+            pcbNode->cpuIndex++;
+
+            // if this idx is the last CPU burst
+            if(pcbNode->cpuIndex >= pcbNode->numCPUBurst)
+            {
+                free(pcbNode->CPUBurst);
+                free(pcbNode->IOBurst);
+                free(pcbNode);
+                data.cpu_busy = 0;
+            }
+            else
+            {
+                // critical section: insert PCB to the IO queue
+                pthread_mutex_lock(&data.lock);
+                addNewPCB(data.io_queue, pcbNode);
+                pthread_mutex_unlock(&data.lock);
+
+                data.cpu_busy = 0;
+                sem_post(&data.sem_io);
+            }
+        }
+    }
+
+    data.cpu_sch_done = 1;
+
+    // return the mainData struct
+    data_ptr = (mainData *)malloc(sizeof(mainData));
+    if(data_ptr == NULL)
+    {
+        printf("ERROR: malloc failed\n");
+        exit(1);
+    }
+    *data_ptr = data;
+    pthread_exit((void *)data_ptr);
+}

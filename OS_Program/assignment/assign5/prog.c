@@ -1,36 +1,109 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <pthread.h>
 #include <semaphore.h>
 #include <string.h>
 #include <time.h>
+#include <errno.h>
 #include <sys/times.h>
 #include "linkedList.h"
 
+#define FIFO 1
+#define SJF 2
+#define PR 3
+#define RR 4
+
 int i = 0;
+int file_read_done = 0;
+int cpu_sch_done = 0;
+int io_sys_done = 0;
+int cpu_busy = 0;
+int io_busy = 0;
 
-// this struct will store the arg data, this is critical section
-typedef struct mainData
+sem_t sem_cpu;
+sem_t sem_io;
+pthread_mutex_t lock;
+
+typedef struct list
 {
-    int file_read_done;
-    int cpu_sch_done;
-    int io_sys_done;
-    sem_t cpu_busy;
-    sem_t io_busy;
-    sem_t sem_cpu;
-    sem_t sem_io;
-
-    // double linked list query
-    PCB_st* ready_queue;
-    PCB_st* io_queue;
-
-} mainData;
+    PCB_st* ready_Q;
+    PCB_st* io_Q;
+    int algoFlag;
+} list;
 
 /*
 This function will create a new node of the double linked list
-@ param:
-    arg: argument passed to the thread, this is the mainData struct
+    @ param
+    arg: the list structure
 */
+void* fileRead(void *arg);
+
+/*
+This function will go through the CPU schedule algorithm for FIFO, SJF, RR, and PR
+    @ param
+    arg: the list structure
+*/
+void* cpuSchedule(void *arg);
+
+/*
+This function will simulate the IO system
+    @ param
+    arg: the list structure
+*/
+void* ioSystem(void *arg);
+
+
+int main(int argc, char* argv[])
+{
+    // create these new list
+    list *myList = (list *)malloc(sizeof(list));
+    myList->ready_Q = newPCBlist();
+    myList->io_Q = newPCBlist();
+    if(!myList || !myList->ready_Q || !myList->io_Q)
+    {
+        fprintf(stderr,"ERROR: main cannot allocate memory\n");
+        return -1;
+    }
+
+    myList->algoFlag = FIFO;
+
+    // create the semaphore
+    sem_init(&sem_cpu, 0, 0);
+    sem_init(&sem_io, 0, 0);
+
+    // create threads virable
+    pthread_t file_read_thread;
+    pthread_t cpu_sch_thread;
+    pthread_t io_sys_thread;
+
+    // create file read threads
+    pthread_create(&file_read_thread, NULL, fileRead, (void*)&myList);
+
+    // create cpu schedule threads
+    pthread_create(&cpu_sch_thread, NULL, cpuSchedule, (void*)&myList);
+
+    // create io system threads
+    pthread_create(&io_sys_thread, NULL, ioSystem, (void*)&myList);
+
+    // wait thread
+    pthread_join(file_read_thread, (void**)&myList);
+    pthread_join(cpu_sch_thread, (void**)&myList);
+    pthread_join(io_sys_thread, (void**)&myList);
+
+    printLL(myList->ready_Q);
+    printLL(myList->io_Q);
+
+    freeList(myList->ready_Q);
+    freeList(myList->io_Q);
+    free(myList);
+
+    return EXIT_SUCCESS;
+}
+
+
+
+
 void *fileRead(void *arg)
 {
     // necessary file read variables
@@ -40,9 +113,9 @@ void *fileRead(void *arg)
     int currentCPU, currentIO;
     PCB_st tempPCB;
 
-    // get the mainData struct
-    mainData data = *((mainData*)arg);
-    mainData *data_ptr = (mainData*)arg;
+    // get the list struct
+    list data = *((list*)arg);
+    list *data_ptr = (list*)arg;
 
     // open the file
     FILE *inFile = fopen("input.txt", "r");
@@ -71,7 +144,6 @@ void *fileRead(void *arg)
                 return NULL;
             }
             
-
             // read the CPU and IO burst list alternatively in one line
             tempPCB.cpuIndex = 0;
             tempPCB.ioIndex = 0;
@@ -95,23 +167,21 @@ void *fileRead(void *arg)
             PCB_st *newNode = newPCBnode(++currPID, tempPCB.ProcPR, tempPCB.numCPUBurst, tempPCB.numIOBurst, tempPCB.CPUBurst, tempPCB.IOBurst);
 
             // critical section: insert PCB into Ready_Q in the mainData struct
-            sem_wait(&data.cpu_busy);
-            addNewPCB(data.ready_queue, newNode);
-            sem_post(&data.cpu_busy);
+            pthread_mutex_lock(&lock);
+            addNewPCB(data.ready_Q, newNode);
+            pthread_mutex_unlock(&lock);
 
             // free the CPU and IO burst list
             free(tempPCB.CPUBurst);
             free(tempPCB.IOBurst);
         }
         // end of the proc command
-
-        //sem_post(&data.sem_cpu);
     }
 
-    data.file_read_done = 1;
+    file_read_done = 1;
 
-    // return the mainData struct
-    data_ptr = (mainData *)malloc(sizeof(mainData));
+    // return the list data struct
+    data_ptr = (list*)malloc(sizeof(list));
     if(data_ptr == NULL)
     {
         printf("ERROR: malloc failed\n");
@@ -123,37 +193,110 @@ void *fileRead(void *arg)
 }
 
 
-int main(int argc, char* argv[])
+
+void *cpuSchedule(void *arg)
 {
-    // necessary variables initialization
-    mainData data;
-    data.ready_queue = newPCBlist();
-    data.io_queue = newPCBlist();
-    data.file_read_done = 0;
-    data.cpu_sch_done = 0;
-    data.io_sys_done = 0;
+    struct timespec ts;
+    ts.tv_sec = 1;
+    ts.tv_nsec = 0;
 
-    // create the semaphore
-    sem_init(&data.cpu_busy, 0, 1);
-    sem_init(&data.io_busy, 0, 1);
-    sem_init(&data.sem_cpu, 0, 0);
-    sem_init(&data.sem_io, 0, 0);
+    // get the list struct
+    list data = *((list*)arg);
+    list *data_ptr = (list*)arg;
 
-    // create threads virable
-    pthread_t file_read_thread;
-    pthread_t cpu_sch_thread;
-    pthread_t io_sys_thread;
+    // while will go through the CPU schedule algorithm
+    while(true)
+    {
+        if(isEmpty(data.ready_Q) == 1 && isEmpty(data.io_Q) == 1 && io_busy == 0 && cpu_busy == 0 && file_read_done == 1) break;
 
-    // create file read threads
-    mainData *dataRet;
-    pthread_create(&file_read_thread, NULL, fileRead, (void*)&data);
+        if(data.algoFlag == FIFO)
+        {
+            int res = sem_timedwait(&sem_cpu, &ts);
+            if(res == -1 && errno == ETIMEDOUT) continue;
+            
+            // simulate the CPU burst
+            cpu_busy = 1;
+            PCB_st *pcbNode = removeHead(data.ready_Q);
+            if(pcbNode == NULL) continue;
+            usleep(pcbNode->CPUBurst[pcbNode->cpuIndex] * 1000);
+            pcbNode->cpuIndex++;
 
-    // wait thread
-    pthread_join(file_read_thread, (void**)&dataRet);
+            // if this idx is the last CPU burst
+            if(pcbNode->cpuIndex >= pcbNode->numCPUBurst)
+            {
+                free(pcbNode->CPUBurst);
+                free(pcbNode->IOBurst);
+                free(pcbNode);
+                cpu_busy = 0;
+            }
+            else
+            {
+                // critical section: insert PCB to the IO queue
+                pthread_mutex_lock(&lock);
+                addNewPCB(data.io_Q, pcbNode);
+                pthread_mutex_unlock(&lock);
 
-    printLL(dataRet->ready_queue);
+                cpu_busy = 0;
+                sem_post(&sem_io);
+            }
+        }
+    }
+
+    cpu_sch_done = 1;
+
+    // return the list data struct
+    data_ptr = (list*)malloc(sizeof(list));
+    if(data_ptr == NULL)
+    {
+        printf("ERROR: malloc failed\n");
+        exit(1);
+    }
+
+    *data_ptr = data;
+    pthread_exit((void *)data_ptr);
+}
+
+void* ioSystem(void *arg)
+{
+    struct timespec ts;
+    ts.tv_sec = 1;
+    ts.tv_nsec = 0;
+
+    // get the list struct
+    list data = *((list*)arg);
+    list *data_ptr = (list*)arg;
+
+    while (true)
+    {
+        if(isEmpty(data.ready_Q) == 1 && cpu_busy == 0 && isEmpty(data.io_Q) == 0 && file_read_done == 1) break;
+        int res = sem_timedwait(&sem_cpu, &ts);
+        if(res == -1 && errno == ETIMEDOUT) continue;
+
+        io_busy = 1;
+        PCB_st *pcbNode = removeHead(data.io_Q);
+        if(pcbNode == NULL) continue;
+        usleep(pcbNode->IOBurst[pcbNode->ioIndex] * 1000);
+        pcbNode->ioIndex++;
+
+        // insert PCB into Ready_Q
+        pthread_mutex_lock(&lock);
+        addNewPCB(data.ready_Q, pcbNode);
+        pthread_mutex_unlock(&lock);
+
+        io_busy = 0;
+        sem_post(&sem_cpu);
+    }
+
+    io_sys_done = 1;
     
+    // return the list data struct  
+    data_ptr = (list*)malloc(sizeof(list));
+    if(data_ptr == NULL)
+    {
+        printf("ERROR: malloc failed\n");
+        exit(1);
+    }
 
-
-    return EXIT_SUCCESS;
+    *data_ptr = data;
+    pthread_exit((void *)data_ptr);
 }
