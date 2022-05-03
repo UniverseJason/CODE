@@ -19,7 +19,7 @@ typedef struct PCB_st
 
 PCB_st *newPCBnode(int pid, int pr, int numCPU, int numIO, int *CPU, int *IO);
 PCB_st *newPCBlist();
-void appendPCBlist(PCB_st **list, PCB_st *node);
+PCB_st *appendPCBlist(PCB_st *list, PCB_st *node);
 void freeList(PCB_st *list);
 void freeNode(PCB_st *node);
 void printLL(PCB_st *list);

@@ -25,8 +25,14 @@ int algoFlag = FIFO;
 sem_t sem_cpu;
 sem_t sem_io;
 
-pthread_mutex_t cpu;
-pthread_mutex_t io;
+sem_t mutex_cpu;
+sem_t mutex_io;
+
+sem_t empty_cpu;
+sem_t full_cpu;
+
+sem_t empty_io;
+sem_t full_io;
 
 
 typedef struct list
@@ -61,78 +67,6 @@ void* ioSystem(void *arg);
 
 int main(int argc, char* argv[])
 {
-    if(argc < 4)
-    {
-        fprintf(stderr, "ERROR: incorrect number of argument.\nUsage: /prog -alg [FIFO|SJF|PR|RR] [-quantum integer(ms)] -input [input_file_name.txt]\n\n");
-        exit(1);
-    }
-
-    int i;
-    int AlgoChecker = false;
-    int flagChecker = false;
-    int inputChecker = false;
-    int quantumChecker = false;
-    int flag = -1;
-    char *inFileName;
-    int quantum = -1;
-
-    // check the argument
-    for(i=0; i<argc; i++)
-    {
-        if (strcmp("-alg", argv[i]) == 0)
-        {
-            AlgoChecker = true;
-        }
-
-        if (strcmp("FIFO", argv[i]) == 0)
-        {
-            flag = FIFO;
-            flagChecker = true;
-        }
-
-        if (strcmp("SJF", argv[i]) == 0)
-        {
-            flag = SJF;
-            flagChecker = true;
-        }
-
-        if (strcmp("PR", argv[i]) == 0)
-        {
-            flag = PR;
-            flagChecker = true;
-        }
-
-        if (strcmp("RR", argv[i]) == 0)
-        {
-            flag = RR;
-            flagChecker = true;
-        }
-
-        if (strcmp("-quantum", argv[i]) == 0)
-        {
-            quantumChecker = true;
-            quantum = atoi(argv[i+1]);
-        }
-
-        if (strcmp("-input", argv[i]) == 0)
-        {
-            inputChecker = true;
-            inFileName = argv[i+1];
-        }
-    }
-
-    if(flag == RR && quantumChecker == false )
-    {
-        fprintf(stderr, "Usage: [RR] [-quantum integer(ms)]\n\n");
-        exit(0);
-    }
-
-    if(inputChecker == false || AlgoChecker == false || flagChecker == false)
-    {
-        fprintf(stderr, "Usage: /prog -alg [FIFO|SJF|PR|RR] [-quantum integer(ms)] -input [input_file_name.txt]\n\n");
-        exit(0);
-    }
-
     // create these new list
     data.ready_Q = newPCBlist();
     data.io_Q = newPCBlist();
@@ -147,6 +81,15 @@ int main(int argc, char* argv[])
     // create the semaphore
     sem_init(&sem_cpu, 0, 1);
     sem_init(&sem_io, 0, 1);
+
+    sem_init(&mutex_cpu, 0, 1);
+    sem_init(&mutex_io, 0, 1);
+
+    sem_init(&empty_cpu, 0, 10);
+    sem_init(&full_cpu, 0, 0);
+
+    sem_init(&empty_io, 0, 10);
+    sem_init(&full_io, 0, 0);
 
     // create threads virable
     pthread_t file_read_thread;
@@ -167,7 +110,7 @@ int main(int argc, char* argv[])
     pthread_join(cpu_sch_thread, NULL);
     pthread_join(io_sys_thread, NULL);
 
-    printf("MAIN: All threads have been joined\n");
+    printf("\n MAIN: All threads have been joined\n");
     printLL(data.ready_Q);
     printf("\n");
     printLL(data.io_Q);
@@ -180,6 +123,11 @@ int main(int argc, char* argv[])
 
 void *fileRead(void *arg)
 {
+    // 1 sec timespec strcut
+    struct timespec sleep_time;
+    sleep_time.tv_sec = 1;
+    sleep_time.tv_nsec = 0;
+
     // necessary file read variables
     int currPID = 0;
     char command[6];
@@ -236,13 +184,21 @@ void *fileRead(void *arg)
             // create a new node for the double linked list
             PCB_st *newNode = newPCBnode(++currPID, tempPCB.ProcPR, tempPCB.numCPUBurst, tempPCB.numIOBurst, tempPCB.CPUBurst, tempPCB.IOBurst);
 
-            // start the clock
-            clock_gettime(&newNode->ts_begin);
-
             // produce: add data to the buffer (ready queue)
-            pthread_mutex_lock(&cpu);
+            int cpu;
+            sem_getvalue(&empty_cpu, &cpu);
+            int res1 = sem_timedwait(&empty_cpu, &sleep_time);
+            int res2 = sem_timedwait(&mutex_cpu, &sleep_time);
+            if( (res1 == -1 || res2 == -1) && errno == ETIMEDOUT)
+            {
+                
+                sem_post(&mutex_cpu);
+                sem_post(&full_cpu);
+                continue;
+            }
             appendPCBlist(&data.ready_Q, newNode);
-            pthread_mutex_unlock(&cpu);
+            sem_post(&mutex_cpu);
+            sem_post(&full_cpu);
             
             // free the CPU and IO burst list
             free(tempPCB.CPUBurst);
@@ -299,12 +255,24 @@ void *cpuSchedule(void *arg)
                 cpu_busy = 1;
 
                 // consume: remove data from the ready queue
-                pthread_mutex_lock(&cpu);
+                int full;
+                sem_getvalue(&full_cpu, &full);
+                printf("cpu consume - full CPU value: %d\n", full);
+                int res1 = sem_timedwait(&full_cpu, &sleep_time);
+                int res2 = sem_timedwait(&mutex_cpu, &sleep_time);
+                if( ((res1 == -1 || res2 == -1) && errno == ETIMEDOUT) || data.ready_Q->next == NULL )
+                {
+                    sem_post(&mutex_cpu);
+                    sem_post(&empty_cpu);
+                    cpu_busy = 0;
+                    continue;
+                }
+
+                // get and remove the first PCB from Ready_Q
                 PCB_st *tempPCB = data.ready_Q->next;
-                if(tempPCB == NULL) continue;
                 removeFirst(&data.ready_Q);
-                pthread_mutex_unlock(&cpu);
-                
+                sem_post(&mutex_cpu);
+                sem_post(&empty_cpu);
 
                 // usleep for PCB->CPUBurst[PCB->cpuindex] (ms)
                 usleep(tempPCB->CPUBurst[tempPCB->cpuIndex] * 1000);
@@ -313,24 +281,29 @@ void *cpuSchedule(void *arg)
                 // this is the last CPU burst
                 if(tempPCB->cpuIndex >= tempPCB->numCPUBurst)
                 {
-                    // calculate the time
-                    clock_gettime(CLOCK_MONOTONIC, &tempPCB->ts_end);
-                    int elapsed = tempPCB->ts_end.tv_sec - tempPCB->ts_begin.tv_sec;
-                    elapsed += (tempPCB.ts_end.tv_nsec - tempPCB->ts_begin.tv_nsec) / 1000000000.0;
-                    printf("turnaround time: %f ms\n", elapsed);
-
                     // free this PCB
-                    pthread_mutex_lock(&cpu);
+                    printf("remove\n");
                     removeNode(&data.ready_Q, tempPCB);
-                    pthread_mutex_unlock(&cpu);
                     cpu_busy = 0;
                 }
                 else
                 {
                     // produce: add data to the IO queue;
-                    pthread_mutex_lock(&io);
+                    int empty;
+                    sem_getvalue(&empty_io, &empty);
+                    printf("cpu produce - empty IO value: %d\n", empty);
+                    int res1 = sem_timedwait(&empty_io, &sleep_time);
+                    int res2 = sem_timedwait(&mutex_io, &sleep_time);
+                    if((res1 == -1 || res2 == -1) && errno == ETIMEDOUT)
+                    {
+                        sem_post(&mutex_io);
+                        sem_post(&full_io);
+                        cpu_busy = 0;
+                        continue;
+                    }
                     appendPCBlist(&data.io_Q, tempPCB);
-                    pthread_mutex_unlock(&io);
+                    sem_post(&mutex_io);
+                    sem_post(&full_io);
 
                     cpu_busy = 0;
                     sem_post(&sem_io);
@@ -367,26 +340,52 @@ void* ioSystem(void *arg)
         io_busy = 1;
 
         // CONSUME: remove the node from the io queue
-        pthread_mutex_lock(&io);
+        int full;
+        sem_getvalue(&full_io, &full);
+        printf("io consume - full IO value: %d\n", full);
+        int res1 = sem_timedwait(&full_io, &sleep_time);
+        int res2 = sem_timedwait(&mutex_io, &sleep_time);
+        if( ((res1 == -1 || res2 == -1) && errno == ETIMEDOUT) || data.io_Q->next == NULL )
+        {
+            sem_post(&mutex_io);
+            sem_post(&empty_io);
+            io_busy = 0;
+            continue;
+        }
+
+        // get and remove the first PCB from IO_Q
         PCB_st *pcbNode = data.io_Q->next;
-        if(pcbNode == NULL) continue;
         removeFirst(&data.io_Q);
-        pthread_mutex_unlock(&io);
+        sem_post(&mutex_io);
+        sem_post(&empty_io);
 
         // IO sleep for the IO burst
         usleep(pcbNode->IOBurst[pcbNode->ioIndex] * 1000);
         pcbNode->ioIndex++;
 
         // PRODUCE: insert PCB back to the Ready_Q
-        pthread_mutex_lock(&cpu);
+        int empty;
+        sem_getvalue(&empty_cpu, &empty);
+        printf("io produce - empty CPU value: %d\n", empty);
+        int res3 = sem_timedwait(&empty_cpu, &sleep_time);
+        int res4 = sem_timedwait(&mutex_cpu, &sleep_time);
+        if( ((res3 == -1 || res4 == -1) && errno == ETIMEDOUT) || data.ready_Q->next == NULL )
+        {
+            sem_post(&mutex_cpu);
+            sem_post(&empty_cpu);
+            io_busy = 0;
+            continue;
+        }
         appendPCBlist(&data.ready_Q, pcbNode);
-        pthread_mutex_unlock(&cpu);
+        sem_post(&mutex_cpu);
+        sem_post(&full_cpu);
 
         // finish the IO burst
         io_busy = 0;
         sem_post(&sem_cpu);
     }
 
+    printf("IO done\n");
     io_busy = 0;
     io_sys_done = 1;
     return NULL;

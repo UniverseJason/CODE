@@ -63,47 +63,31 @@ PCB_st *newPCBlist()
 
 /*
     this function will add a new node to the end of the double linked list
+    and return the new head
 */
-void appendPCBlist(PCB_st **list, PCB_st *node)
+PCB_st *appendPCBlist(PCB_st *list, PCB_st *node)
 {
-    PCB_st *newNode = (PCB_st*)malloc(sizeof(PCB_st));
-    if(!newNode)
+    PCB_st *temp = list;
+
+    // if the list is empty
+    if(list->next == NULL)
     {
-        fprintf(stderr,"ERROR: appendPCBlist cannot allocate memory\n");
-        return;
+        list->next = node;
+        node->prev = list;
+        return list;
     }
 
-    newNode->ProcId = node->ProcId;
-    newNode->ProcPR = node->ProcPR;
-    newNode->numCPUBurst = node->numCPUBurst;
-    newNode->numIOBurst = node->numIOBurst;
-    newNode->CPUBurst = node->CPUBurst;
-    newNode->IOBurst = node->IOBurst;
-    newNode->cpuIndex = node->cpuIndex;
-    newNode->ioIndex = node->ioIndex;
-    newNode->ts_begin.tv_sec = node->ts_begin.tv_sec;
-    newNode->ts_begin.tv_nsec = node->ts_begin.tv_nsec;
-    newNode->ts_end.tv_sec = node->ts_end.tv_sec;
-    newNode->ts_end.tv_nsec = node->ts_end.tv_nsec;
-    newNode->next = NULL;
-    
-    // if the list is empty
-    PCB_st *temp = *list;
-    if(*list == NULL)
+    // find the last node
+    while(temp->next != NULL)
     {
-        newNode->prev = NULL;
-        *list = newNode;
-        return;
+        temp = temp->next;
     }
-    else
-    {
-        while(temp->next != NULL)
-        {
-            temp = temp->next;
-        }
-        temp->next = newNode;
-        newNode->prev = temp;
-    }
+
+    // add the new node to the end of the list
+    temp->next = node;
+    node->prev = temp;
+
+    return list;
 }
 
 
@@ -152,8 +136,9 @@ void printLL(PCB_st *list)
     while(temp->next != NULL)
     {
         temp = temp->next;
-        printf("ID: %d, PR: %d, cpuidx: %d, IOidx: %d\n", temp->ProcId, temp->ProcPR, temp->cpuIndex, temp->ioIndex);
+        printf("ID: %d, PR: %d, CPU: %d, IO: %d\n", temp->ProcId, temp->ProcPR, temp->numCPUBurst, temp->numIOBurst);
     }
+    printf("\n");
 }
 
 /*
@@ -186,9 +171,14 @@ void removeFirst(PCB_st **list)
     {
         PCB_st *temp = *list;
         *list = (*list)->next;
+        (*list)->prev = NULL;
         free(temp);
     }
-    return;
+    else
+    {
+        free(*list);
+        *list = NULL;
+    }
 }
 
 /*
