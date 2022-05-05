@@ -12,20 +12,28 @@ typedef struct PCB_st
     struct PCB_st *prev, *next;
 
     // fields for performance measures, this will use system time
-    int waitingTime;
-    int queueEnterClock;
+    struct timespec time_enter_ready_Q, time_leave_ready_Q;
+    double total_time_in_ready_Q;
     
 } PCB_st;
 
+typedef struct PCB_list
+{
+    PCB_st *head, *tail;
+} PCB_list;
+
 PCB_st *newPCBnode(int pid, int pr, int numCPU, int numIO, int *CPU, int *IO);
-PCB_st *newPCBlist();
-void appendPCBlist(PCB_st **list, PCB_st *node);
-void freeList(PCB_st *list);
-void freeNode(PCB_st *node);
-void printLL(PCB_st *list);
-int isEmpty(PCB_st *list);
-PCB_st *getFirst(PCB_st *list);
-void removeFirst(PCB_st **list);
-void removeNode(PCB_st **list, PCB_st *node);
+PCB_list *newPCBlist();
+void freeList(PCB_list *list);
+
+void appendList(PCB_list *list, PCB_st *node);
+PCB_st *deleteList(PCB_list *list);
+
+int isEmpty(PCB_list *list);
+
+PCB_st *getPCBNode(PCB_list *list, int pid);
+void printLL(PCB_list *list);
+
+double getElapsed(struct timespec begin, struct timespec end);
 
 #endif

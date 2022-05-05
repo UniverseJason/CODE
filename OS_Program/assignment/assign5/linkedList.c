@@ -46,175 +46,124 @@ PCB_st *newPCBnode(int pid, int pr, int numCPU, int numIO, int *CPU, int *IO)
 /*
     this functrion will create a new(empty) double linked list
 */
-PCB_st *newPCBlist()
+PCB_list *newPCBlist()
 {
-    PCB_st *list = (PCB_st*)malloc(sizeof(PCB_st));
+    PCB_list *list = (PCB_list*)malloc(sizeof(PCB_list));
     if(!list)
     {
         fprintf(stderr,"ERROR: newPCBlist cannot allocate memory\n");
         return NULL;
     }
 
-    list->next = NULL;
-    list->prev = NULL;
+    list->head = NULL;
+    list->tail = NULL;
 
     return list;
 }
 
 /*
-    this function will add a new node to the end of the double linked list
+    this function will free the double linked list
 */
-void appendPCBlist(PCB_st **list, PCB_st *node)
+void freeList(PCB_list *list)
 {
-    PCB_st *newNode = (PCB_st*)malloc(sizeof(PCB_st));
-    if(!newNode)
+    PCB_st *temp;
+    
+    while(list->head != NULL)
     {
-        fprintf(stderr,"ERROR: appendPCBlist cannot allocate memory\n");
-        return;
+        temp = list->head;
+        list->head = list->head->next;
+        free(temp);
     }
 
-    newNode->ProcId = node->ProcId;
-    newNode->ProcPR = node->ProcPR;
-    newNode->numCPUBurst = node->numCPUBurst;
-    newNode->numIOBurst = node->numIOBurst;
-    newNode->CPUBurst = node->CPUBurst;
-    newNode->IOBurst = node->IOBurst;
-    newNode->cpuIndex = node->cpuIndex;
-    newNode->ioIndex = node->ioIndex;
-    newNode->ts_begin.tv_sec = node->ts_begin.tv_sec;
-    newNode->ts_begin.tv_nsec = node->ts_begin.tv_nsec;
-    newNode->ts_end.tv_sec = node->ts_end.tv_sec;
-    newNode->ts_end.tv_nsec = node->ts_end.tv_nsec;
-    newNode->next = NULL;
-    
-    // if the list is empty
-    PCB_st *temp = *list;
-    if(*list == NULL)
+    free(list);
+}
+
+/*
+    this function will add a new node to the end of the double linked list
+*/
+void appendList(PCB_list *list, PCB_st *node)
+{
+    // if this is empty list
+    if(list->head == NULL)
     {
-        newNode->prev = NULL;
-        *list = newNode;
-        return;
+        list->head = node;
+        list->tail = node;
     }
     else
     {
-        while(temp->next != NULL)
-        {
-            temp = temp->next;
-        }
-        temp->next = newNode;
-        newNode->prev = temp;
+        list->tail->next = node;
+        node->prev = list->tail;
+        node->next = NULL;
+        list->tail = node;
     }
 }
-
-
 /*
-    this function will free the double linked list
+    this function will remove the head node of the double linked list
+    and will return it to the caller.
 */
-void freeList(PCB_st *list)
+PCB_st *deleteList(PCB_list *list)
 {
-    if(isEmpty(list))
+    PCB_st *temp;
+
+    if(list->head == NULL)
     {
-        fprintf(stderr,"ERROR: freeList cannot free an empty list\n");
-        return;
+        return NULL;
+    }
+    else if (list->head == list->tail)
+    {
+        temp = list->head;
+        list->head = NULL;
+        list->tail = NULL;
+    }
+    else
+    {
+        temp = list->head;
+        list->head = list->head->next;
     }
 
-    PCB_st *temp = list;
-    while(temp->next != NULL)
-    {
-        temp = temp->next;
-        free(temp->prev);
-    }
-    free(temp);
-}
-
-/*
-    this function will free a node
-*/
-void freeNode(PCB_st *node)
-{
-    free(node->CPUBurst);
-    free(node->IOBurst);
-    free(node);
-}
-
-/*
-    this function will print all the node in the Linked list
-*/
-void printLL(PCB_st *list)
-{
-    if(isEmpty(list))
-    {
-        fprintf(stderr,"ERROR: printLL cannot print empty list\n");
-        return;
-    }
-
-    PCB_st *temp = list;
-    while(temp->next != NULL)
-    {
-        temp = temp->next;
-        printf("ID: %d, PR: %d, cpuidx: %d, IOidx: %d\n", temp->ProcId, temp->ProcPR, temp->cpuIndex, temp->ioIndex);
-    }
+    temp->next = NULL;
+    temp->prev = NULL;
+    return temp;
 }
 
 /*
     this function will check if the list is empty
 */
-int isEmpty(PCB_st *list)
+int isEmpty(PCB_list *list)
 {
-    if(list->next == NULL)
+    if(list->head == NULL)
+    {
         return 1;
+    }
     else
+    {
         return 0;
+    }
 }
 
 /*
-    this function save the first node of the double linked list
+    this function will print all the node in the Linked list
 */
-PCB_st *getFirst(PCB_st *list)
+void printLL(PCB_list *list)
 {
-    if(isEmpty(list)) return NULL;
-    return list->next;
-}
-
-
-/* 
-    this function will remove the head node of the double linked list
-*/
-void removeFirst(PCB_st **list)
-{
-    if(*list != NULL)
+    if(isEmpty(list)) return;
+    
+    PCB_st *temp = list->head;
+    while(temp != NULL)
     {
-        PCB_st *temp = *list;
-        *list = (*list)->next;
-        free(temp);
+        printf("ID: %d, PR: %d, cpuidx: %d, IOidx: %d\n", temp->ProcId, temp->ProcPR, temp->cpuIndex, temp->ioIndex);
+        temp = temp->next;
     }
-    return;
+    printf("\n");
 }
 
 /*
-    This function will remove a node from the double linked list
+    this function will get elapsed time in ms
 */
-void removeNode(PCB_st **list, PCB_st *node)
+double getElapsed(struct timespec begin, struct timespec end)
 {
-    // head node is null
-    if(*list == NULL || node == NULL) return;
-
-    // if node is head
-    if(node == *list)
-    {
-        *list = (*list)->next;
-    }
-
-    if(node->next != NULL)
-    {
-        node->next->prev = node->prev;
-    }
-
-    if(node->prev != NULL)
-    {
-        node->prev->next = node->next;
-    }
-
-    free(node);
-    return;
+    double elapsed;
+    elapsed = end.tv_sec - begin.tv_sec;
+    elapsed += (end.tv_nsec - begin.tv_nsec) / 1000000000.0;
+    return elapsed * 1000;
 }
