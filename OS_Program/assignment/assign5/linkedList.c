@@ -127,6 +127,79 @@ PCB_st *deleteList(PCB_list *list)
 }
 
 /*
+    this functino will select the node with the highest priority
+    or with the minimun CPU burst cycle
+*/
+PCB_st *deleteNode_SJT_or_PR(PCB_list *list, int algorithm)
+{
+    PCB_st *temp, *target;
+    temp = list->head;
+    target = list->head;
+
+    if(list->head == NULL)
+    {
+        return NULL;
+    }
+    
+    if(list->head == list->tail)
+    {
+        target = list->head;
+        list->head = NULL;
+        list->tail = NULL;
+        return target;
+    }
+
+    // go through the linked list
+    if(algorithm == SJF)
+    {
+        while(temp != NULL)
+        {
+            if(temp->CPUBurst[temp->cpuIndex] < target->CPUBurst[target->cpuIndex])
+            {
+                target = temp;
+            }
+            temp = temp->next;
+        }
+    }
+    else if(algorithm == PR)
+    {
+        while(temp != NULL)
+        {
+            if(temp->ProcPR < target->ProcPR)
+            {
+                target = temp;
+            }
+            temp = temp->next;
+        }
+    }
+
+    // if the target is the head
+    if(target == list->head)
+    {
+        list->head = list->head->next;
+        list->head->prev = NULL;
+    }
+
+    // if the target is the tail
+    else if(target == list->tail)
+    {
+        list->tail = list->tail->prev;
+        list->tail->next = NULL;
+    }
+
+    // if the target is in the middle
+    else
+    {
+        target->prev->next = target->next;
+        target->next->prev = target->prev;
+    }
+
+    target->next = NULL;
+    target->prev = NULL;
+    return target;
+}
+
+/*
     this function will check if the list is empty
 */
 int isEmpty(PCB_list *list)

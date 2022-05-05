@@ -10,18 +10,16 @@
 #include <sys/times.h>
 #include "linkedList.h"
 
-#define FIFO 1
-#define SJF 2
-#define PR 3
-#define RR 4
-
 int i = 0;
 int file_read_done = 0;
 int cpu_sch_done = 0;
 int io_sys_done = 0;
 int cpu_busy = 0;
 int io_busy = 0;
-int algoFlag = FIFO;
+
+char *inFileName;
+int algoFlag = -1;
+int quantum = -1;
 
 // for performance measures
 double Total_Turnaround_Time = 0;
@@ -71,7 +69,98 @@ void* ioSystem(void *arg);
 
 int main(int argc, char* argv[])
 {
-    // create these new list
+    // check input argument
+    if(argc < 4)
+    {
+        fprintf(stderr, "ERROR: incorrect number of argument.\nUsage: /prog -alg [FIFO|SJF|PR|RR] [-quantum integer(ms)] -input [input_file_name.txt]\n\n");
+        exit(1);
+    }
+
+    int AlgoChecker = false;
+    int flagChecker = false;
+    int inputChecker = false;
+    int quantumChecker = false;
+
+    // check the argument
+    for(i=0; i<argc; i++)
+    {
+        if (strcmp("-alg", argv[i]) == 0)
+        {
+            AlgoChecker = true;
+        }
+
+        if (strcmp("FIFO", argv[i]) == 0)
+        {
+            algoFlag = FIFO;
+            flagChecker = true;
+        }
+
+        if (strcmp("SJF", argv[i]) == 0)
+        {
+            algoFlag = SJF;
+            flagChecker = true;
+        }
+
+        if (strcmp("PR", argv[i]) == 0)
+        {
+            algoFlag = PR;
+            flagChecker = true;
+        }
+
+        if (strcmp("RR", argv[i]) == 0)
+        {
+            algoFlag = RR;
+            flagChecker = true;
+        }
+
+        if (strcmp("-quantum", argv[i]) == 0)
+        {
+            quantumChecker = true;
+            quantum = atoi(argv[i+1]);
+        }
+
+        if (strcmp("-input", argv[i]) == 0)
+        {
+            inputChecker = true;
+            inFileName = argv[i+1];
+        }
+    }
+
+    // check RR statement
+    if(algoFlag == RR && quantumChecker == false )
+    {
+        fprintf(stderr, "Usage: [RR] [-quantum integer(ms)]\n\n");
+        exit(EXIT_FAILURE);
+    }
+
+    if(inputChecker == false || AlgoChecker == false || flagChecker == false)
+    {
+        fprintf(stderr, "Usage: /prog -alg [FIFO|SJF|PR|RR] [-quantum integer(ms)] -input [input_file_name.txt]\n\n");
+        exit(EXIT_FAILURE);
+    }
+
+    // get algo name for output
+    char *algoName;
+    switch(algoFlag)
+    {
+        case FIFO:
+            algoName = "FIFO";
+            break;
+        case SJF:
+            algoName = "SJF";
+            break;
+        case PR:
+            algoName = "PR";
+            break;
+        case RR:
+            algoName = "RR";
+            break;
+        default:
+            algoName = "ERROR";
+            break;
+    }
+
+    // create new list
     ready_Q = newPCBlist();
     io_Q = newPCBlist();
     if(!ready_Q || !io_Q)
@@ -79,8 +168,6 @@ int main(int argc, char* argv[])
         fprintf(stderr,"ERROR: main cannot allocate memory\n");
         return -1;
     }
-
-    algoFlag = FIFO;
 
     // create the semaphore
     sem_init(&sem_cpu, 0, 1);
@@ -109,15 +196,22 @@ int main(int argc, char* argv[])
     pthread_join(file_read_thread, NULL);
     pthread_join(cpu_sch_thread, NULL);
     pthread_join(io_sys_thread, NULL);
-
+    
     clock_gettime(CLOCK_MONOTONIC, &thread_end);
+
+    // calculate the throughput
     Throughput = (double)num_of_process / getElapsed(thread_start, thread_end);
 
-    printf("MAIN: All threads have been joined\n");
+    // print the statistics
+    printf("Input file name: %s\n", inFileName);
+    printf("CPU Scheduling Alg: %s ", algoName);
+    
+    if (algoFlag == RR) { printf("quantum: %d\n", quantum); } else { printf("\n");}
+    
     printf("CPU utilization: %.3lf %%\n", (utilization / getElapsed(thread_start, thread_end)) * 100);
     printf("Throughput: %.3lf processes/ms\n", Throughput);
     printf("Avg. Turnaround time: %.3lf ms\n", Total_Turnaround_Time / num_of_process);
-    printf("Avg. Waiting time: %.3lf ms\n", Total_Waiting_Time / num_of_waiting_process);
+    printf("Avg. Waiting time: %.3lf ms\n\n", Total_Waiting_Time / num_of_waiting_process);
 
     // free the list
     freeList(ready_Q);
@@ -139,7 +233,7 @@ void *fileRead(void *arg)
     PCB_st tempPCB;
 
     // open the file
-    FILE *inFile = fopen("input.txt", "r");
+    FILE *inFile = fopen(inFileName, "r");
     if(!inFile)
     {
         fprintf(stderr,"ERROR: fileRead cannot open file\n");
@@ -233,62 +327,112 @@ void *cpuSchedule(void *arg)
     sleep_time.tv_sec = 1;
     sleep_time.tv_nsec = 0;
 
+    PCB_st *tempPCB;
 
     // while will go through the CPU schedule algorithm
     while(true)
     {
         //if(file_read_done == 1) break;
         if(isEmpty(ready_Q) == 1 && isEmpty(io_Q) == 1 && io_busy == 0 && cpu_busy == 0 && file_read_done == 1) break;
-        if(algoFlag == FIFO)
+        
+        // wait for the cpu to be available
+        int res = sem_timedwait(&sem_cpu, &sleep_time);
+        if(res == -1 && errno == ETIMEDOUT) continue;
+        if(isEmpty(ready_Q) == 1) continue;
+        
+        // simulate the CPU burst
+        // consume: remove data from the ready queue
+        cpu_busy = 1;
+        if(algoFlag == FIFO || algoFlag == RR)
         {
-            int res = sem_timedwait(&sem_cpu, &sleep_time);
-            if(res == -1 && errno == ETIMEDOUT) continue;
-            if(isEmpty(ready_Q) == 1) continue;
-            
-            // simulate the CPU burst
-            cpu_busy = 1;
             clock_gettime(CLOCK_MONOTONIC, &cpu_start);
-
-            // consume: remove data from the ready queue
             sem_wait(&ready_Q_semaphore);
-            PCB_st *tempPCB = deleteList(ready_Q);
+            tempPCB = deleteList(ready_Q);
             clock_gettime(CLOCK_MONOTONIC, &tempPCB->time_leave_ready_Q);
             Total_Waiting_Time += getElapsed(tempPCB->time_enter_ready_Q, tempPCB->time_leave_ready_Q);
             sem_post(&ready_Q_semaphore);
-            
-            // usleep for PCB->CPUBurst[PCB->cpuindex] (ms)
+        }
+        else if(algoFlag == SJF)
+        {
+            clock_gettime(CLOCK_MONOTONIC, &cpu_start);
+            sem_wait(&ready_Q_semaphore);
+            tempPCB = deleteNode_SJT_or_PR(ready_Q, SJF);
+            clock_gettime(CLOCK_MONOTONIC, &tempPCB->time_leave_ready_Q);
+            Total_Waiting_Time += getElapsed(tempPCB->time_enter_ready_Q, tempPCB->time_leave_ready_Q);
+            sem_post(&ready_Q_semaphore);
+        }
+        else if(algoFlag == PR)
+        {
+            clock_gettime(CLOCK_MONOTONIC, &cpu_start);
+            sem_wait(&ready_Q_semaphore);
+            tempPCB = deleteNode_SJT_or_PR(ready_Q, PR);
+            clock_gettime(CLOCK_MONOTONIC, &tempPCB->time_leave_ready_Q);
+            Total_Waiting_Time += getElapsed(tempPCB->time_enter_ready_Q, tempPCB->time_leave_ready_Q);
+            sem_post(&ready_Q_semaphore);
+        }
+        else
+        {
+            printf("ERROR: cpuSchedule cannot recognize the algorithm\n");
+            exit(EXIT_FAILURE);
+        }
+        
+        // usleep for PCB->CPUBurst[PCB->cpuindex] (ms)
+        if(algoFlag != RR)
+        {
             usleep(tempPCB->CPUBurst[tempPCB->cpuIndex] * 1000);
             tempPCB->cpuIndex++;
-
-            if(tempPCB->cpuIndex >= tempPCB->numCPUBurst)
+        }
+        // this is for RR
+        else
+        {
+            if(quantum <= 0)
             {
-                // calculate the time
-                clock_gettime(CLOCK_MONOTONIC, &tempPCB->ts_end);
-                Total_Turnaround_Time += getElapsed(tempPCB->ts_begin, tempPCB->ts_end);
-
-                // free this PCB
-                free(tempPCB->CPUBurst);
-                free(tempPCB->IOBurst);
-                free(tempPCB);
-                
-                cpu_busy = 0;
-                clock_gettime(CLOCK_MONOTONIC, &cpu_end);
-                utilization += getElapsed(cpu_start, cpu_end);
+                printf("ERROR: quantum is <= 0\n");
+                exit(EXIT_FAILURE);
+            }
+            int PCBsleep = tempPCB->CPUBurst[tempPCB->cpuIndex] - quantum;
+            if(PCBsleep > quantum)
+            {
+                usleep(PCBsleep * 1000);
+                tempPCB->CPUBurst[tempPCB->cpuIndex] = PCBsleep;
             }
             else
             {
-                // produce: add data to the IO queue;
-                sem_wait(&io_Q_semaphore);
-                appendList(io_Q, tempPCB);
-                sem_post(&io_Q_semaphore);
-
-                cpu_busy = 0;
-                clock_gettime(CLOCK_MONOTONIC, &cpu_end);
-                utilization += getElapsed(cpu_start, cpu_end);
-                
-                sem_post(&sem_io);
+                usleep(tempPCB->CPUBurst[tempPCB->cpuIndex] * 1000);
+                tempPCB->cpuIndex++;
             }
         }
+
+        // if this is the last CPU burst round
+        if(tempPCB->cpuIndex >= tempPCB->numCPUBurst)
+        {
+            // calculate the time
+            clock_gettime(CLOCK_MONOTONIC, &tempPCB->ts_end);
+            Total_Turnaround_Time += getElapsed(tempPCB->ts_begin, tempPCB->ts_end);
+
+            // free this PCB
+            free(tempPCB->CPUBurst);
+            free(tempPCB->IOBurst);
+            free(tempPCB);
+            
+            cpu_busy = 0;
+            clock_gettime(CLOCK_MONOTONIC, &cpu_end);
+            utilization += getElapsed(cpu_start, cpu_end);
+        }
+        else
+        {
+            // produce: add data to the IO queue;
+            sem_wait(&io_Q_semaphore);
+            appendList(io_Q, tempPCB);
+            sem_post(&io_Q_semaphore);
+
+            cpu_busy = 0;
+            clock_gettime(CLOCK_MONOTONIC, &cpu_end);
+            utilization += getElapsed(cpu_start, cpu_end);
+            
+            sem_post(&sem_io);
+        }
+        
     }
 
     cpu_sch_done = 1;

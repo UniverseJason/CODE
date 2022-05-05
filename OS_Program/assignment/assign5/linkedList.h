@@ -1,6 +1,11 @@
 #ifndef linkedList_h
 #define linkedList_h
 
+#define FIFO 1
+#define SJF 2
+#define PR 3
+#define RR 4
+
 typedef struct PCB_st
 {
     int ProcId;
@@ -28,6 +33,7 @@ void freeList(PCB_list *list);
 
 void appendList(PCB_list *list, PCB_st *node);
 PCB_st *deleteList(PCB_list *list);
+PCB_st *deleteNode_SJT_or_PR(PCB_list *list, int algorithm);
 
 int isEmpty(PCB_list *list);
 
