@@ -1,10 +1,11 @@
 #ifndef linkedList_h
 #define linkedList_h
-
 #define FIFO 1
 #define SJF 2
 #define PR 3
 #define RR 4
+
+#include <time.h>
 
 typedef struct PCB_st
 {
