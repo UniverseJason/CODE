@@ -1,0 +1,415 @@
+Q:Under the American federal system, powers ______.
+A:not expressly granted to the national government are reserved for the states
+
+Q:A school district has one function: education. Therefore, it is an example of a
+-purpose government.
+A:limited
+
+Q:A ______ city is one whose charter is specified in state statutes.
+A:general law
+
+Q:All Texas cities have a power called ______ over an area that extends beyond the city limits to an area adjacent to the city limits.
+A:extraterritorial jurisdiction
+
+Q:Texas has approximately ______ local government units.
+A:5,000
+
+Q:In a unitary system, state power ______.
+A:is expressly granted by the central government
+
+Q:Which of the following is the most visible example of a general-purpose government?
+A:municipality
+
+Q:A ______ city is one whose charter is created by the actions of local citizens.
+A:home-rule
+
+Q:General-law cities have ______ of extraterritorial jurisdiction outside their city limits.
+A:0.5 miles
+
+Q:The United States is characterized by its highly decentralized system of government. Where are the principles of federalism enshrined?
+A:U.S. Constitution
+
+Q:What is the source of state police powers?
+A:Tenth Amendment
+
+Q:Which of the following are characteristics of general-purpose governments?
+A:in control of their own finances, personnel, and government structure
+broad discretionary authority
+
+Q:In order to be chartered as a home rule city in Texas, cities must have a population of at least
+A:5,000.
+
+Q:The process of establishing a city is known as ______.
+A:incorporation
+
+Q:Which of the following describes American federalism?
+A:rooted in the historic fear of a strong national government
+a highly decentralized system of government
+
+Q:Local governments get their authority from ______ governments.
+A:state
+
+Q:Which of the following is an example of a general-purpose government?
+A:city
+
+Q:With regard to the annexation process, the state of Texas passed Senate Bill 6 and House Bill 347 in 2017 and 2019 that ______.
+A:gives a voice in the annexation process to those in a city's ETJ
+
+Q:What are the two basic forms of government used by Texas cities today?
+A:council-manager
+mayor-council
+
+Q:True or false: In a council-manager form of government, the city manager dominates in the areas of mission and policy.
+A:False
+
+Q:Which of the following statements about annexation are true under Texas law?
+A:A city can annex unincorporated land that adjoins its city limits.
+Cities may annex land within their area of extraterritorial jurisdiction.
+
+Q:In the council-manager form of government, mayors ______ have veto power.
+A:occasionally
+
+Q:What are the two forms of the mayor-council system of city government?
+A:strong mayor
+weak mayor
+
+Q:The most popular form of government among Texas cities is the ______ form.
+A:council-manager
+
+Q:Most city managers are ______.
+A:trained professionals
+
+Q:Identify the reasons why a city might annex land within their ETJ.
+A:to keep from being surrounded by other cities
+to become more politically important
+to protect and enhance their tax base
+
+Q:In the council-manager form of government, council members ______.
+A:are generally part-time and have no salary
+
+Q:In the council-
+form of city government, the citizens elect a council and a mayor, and those officials hire a professional administrator to run the city.
+A:manager
+
+Q:In a council-manager form of government, how does someone become city manager?
+A:appointment by the city council
+
+Q:What aspect of the council-manager form of government allows city managers to ignore large parts of the community when it comes to the provision of simple city services?
+A:political coalitions on the council
+
+Q:Which of the following characterize the role of mayor in the council-manager form of city government?
+A:presiding officer of the city council
+ceremonial leader
+
+Q:Which of the following describes the powers of the executive in the weak mayor form of government?
+A:The mayor has limited control over budget formation and execution.
+Executive powers are shared with the city council and other elected officials.
+
+Q:A city
+is hired to serve as chief administrative officer of some city governments.
+A:manager
+
+Q:Which of the following best describes city managers' role in policy making?
+A:Their role is generally advisory.
+
+Q:Which of the following are considered weaknesses of the council-manager form of government?
+A:Powerful city managers can hide information from the council.
+Council members are part-time.
+
+Q:The state statues that create a general law cities ______.
+A:create very weak mayors
+
+Q:How do weak mayors' and strong mayors' veto powers differ?
+A:Weak mayors have little or no veto power; strong mayors have full veto power.
+
+Q:Which of the following statements are correct about the commission form of government?
+A:The form had several fundamental weaknesses and was eventually abandoned by most cities that adopted it.
+Before 1920, many cities adopted the commission form of city government.
+
+Q:Under which municipal form of government are citizens most likely to believe they lack influence?
+A:council-manager
+
+Q:Which of the following best describes the form of government in Houston?
+A:mayor-council form of government with a blend of strong and weak mayoral powers
+
+Q:Under the
+mayor form of government, the mayor can appoint and remove the major heads of departments, has control over budget formation and execution, and can veto the actions of the city council.
+A:strong or
+
+Q:How many home rule cities in Texas currently use the commission form of government?
+A:0
+
+Q:One of the major flaws of the commission form of city government is that ______.
+A:it combined legislative and executive functions
+
+Q:The term "commission" survived the end of the commission form of government in some cities, but it was used to describe the ______.
+A:city council
+
+Q:The combination of legislative and executive functions in the commission form of government led to which of the following?
+A:logrolling
+a lack of checks and balances
+efficiency
+
+Q:The major contribution of the commission form of government was ______.
+A:that it served as a transition between the old weak mayor-council form of government and the new council-manager form
+
+Q:The most common form of at-large voting in Texas is ______.
+A:at-large by place
+
+Q:Under the
+mayor form of government, the mayor can appoint and remove the major heads of departments, has control over budget formation and execution, and can veto the actions of the city council.
+A:strong or
+
+Q:The ______ form of city government was created in Galveston after the 1901 hurricane but is no longer in use in Texas today.
+A:commission
+
+Q:How many district elections in Texas are single-member district systems?
+A:all
+
+Q:Which of the following were weaknesses of the commission form of city government?
+A:Voters didn't always elect competent administrators.
+The commission had no leader in its initial form, as commissioners rotated the position of mayor among themselves.
+The system didn't allow for effective checks and balances.
+
+Q:What form of local government was likely to replace the commission?
+A:the council-manager form
+
+Q:In an at-large election system, ______.
+A:all voters in the city elect the mayor and city council members
+
+Q:In cities that have switched from at-large to single-member districts, the election of minority candidates to the city council has ______.
+A:increased substantially
+
+Q:In a true single-member district system, only the
+is selected at large.
+A:mayor
+
+Q:The preferential voting system is also referred to as the
+-
+system, which allows voters to rank their candidates for city council.
+A:instant
+
+Q:Like some other Texas cities, Houston uses ______ for its city council elections.
+A:a combination of single-member and at-large districts
+
+Q:A study of Texas's biggest cities found that council members from single-member districts (SMDs) differed from those from at-large districts in which of the following ways?
+A:Council members from SMDs increased their contacts with constituents regarding service requests.
+Council members from SMDs showed more concern for neighborhood issues.
+
+Q:Nonpartisan elections were chosen for city elections in the early twentieth century to ______.
+A:undercut the power of big-city political machines
+
+Q:In what type of voting system does each voter have the votes equal to the amount of seats open in an election, and can concentrate all of their votes on one candidate rather than casting one vote for each office up for election?
+A:cumulative voting
+
+Q:Media coverage in city elections mostly ______.
+A:ignores suburban city elections
+
+Q:Which of the following is the main reason that most major cities in Texas have changed to single-member district systems?
+A:application of the Voting Rights Act to Texas
+
+Q:Generally, Texas counties provide which of the following?
+A:road construction and repair
+police protection
+
+Q:In a true single-member district system, only the
+is selected at large.
+A:mayor
+
+Q:True or false: Rural residents are more likely to identify with county governments than with city government.
+A:True
+
+Q:Which statements are true about Texas municipal elections? (Choose every correct answer.)
+A:The Texas Election Code allows home rule cities to use partisan elections.
+No Texas cities officially use partisan elections today.
+Although local elections are nonpartisan, it is easy for voters to understand a candidate's political leanings.
+
+Q:The preferential voting system is also referred to as the
+-
+system, which allows voters to rank their candidates for city council.
+A:instant
+
+Q:How could voter turnout be improved in local elections?
+A:Hold the election in November.
+
+Q:When counties issue marriage licenses, birth certificates, and automobile registrations they are acting ______.
+A:as an arm of the state
+
+Q:Most counties in Texas are ______.
+A:rural, with small populations
+
+Q:What are some of the reasons that local elections have lower voter turnout than other elections?
+A:Elections are held in May rather than November.
+There are uncontested seats.
+They are conducted in off years.
+
+Q:True or false: All Texas county governments have the same basic structure regardless of the county's size.
+A:True
+
+Q:Which of the following are true statements about county commissioners?
+A:They are elected for four-year terms.
+They are elected from commissioner precincts.
+They are elected in partisan elections.
+
+Q:All of the following are constitutionally prescribed county officers except ______.
+A:county surveyor
+
+Q:The preferential voting system is also referred to as the
+-
+system, which allows voters to rank their candidates for city council.
+A:instant
+
+Q:County government officials are almost all ______.
+A:elected by voters in the county
+
+Q:In small rural counties, the sheriff is allowed by law to also function as the county ______.
+A:tax assessor-collector
+
+Q:In Texas, county commissioner's courts are made up of the constitutional county judge and ______ county commissioners.
+A:four
+
+Q:Constitutional county judges must be ______ before they run for office.
+A:well informed in the law
+
+Q:County attorneys usually prosecute less serious criminal offenses before ______ courts.
+A:county
+
+Q:The county tax assessor/collector is responsible for ______. 
+A:collecting state and county revenue
+
+Q:What is likely to be the sheriff's primary duty in urban counties?
+A:operating the county jail
+
+Q:Which of the following may be a duty of the county clerk?
+A:administering elections
+issuing birth certificates
+
+Q:One of the chief prosecutors for serious court cases in a county is the ______.
+A:district attorney
+
+Q:Which of the following is a duty of the county tax assessor/collector?
+A:voter registration
+sale of state vehicle licenses and permits
+county property tax collection
+
+Q:What are duties of the county treasurer in Texas?
+A:disburses county funds
+reconciles all bank statements
+receives county funds
+
+Q:The county auditor is ______.
+A:appointed by the district judge(s)
+
+Q:If you wish to obtain a marriage license, you should visit the office of the ______.
+A:county clerk
+
+Q:Which of the following accurately describes county attorneys in Texas?
+A:Not all counties have county attorneys.
+
+Q:What office is responsible for receiving, maintaining, and disbursing special revenue funds?
+A:county treasurer
+
+Q:Counties with populations of fewer than ______ are not required to have auditors.
+A:10,000
+
+Q:Which of the following is a weakness of county government in Texas?
+A:It is unable to provide urban services.
+Plural executive is inherently weak.
+
+Q:To get basic services like water or sewage service, citizens living just outside of cities are forced to do which of the following?
+A:contract with private contractors for the services
+contract with the city for the services
+form other governments, like water districts
+provide those services themselves
+
+Q:The holder of what office my be designated as the chief investment officer for the county?
+A:county treasurer
+
+Q:The county auditor has the responsibility to ______.
+A:oversee the collection and disbursement of county funds
+
+Q:If you are buying a home in a rural area in Texas, to whom or what office can you look to ensure your builders do a good job?
+A:only the builders themselves
+
+Q:True or false: After an election, personnel at the county courthouse can change dramatically.
+A:True
+
+Q:County government was designed to meet the needs of and provide services to a(n) ______ population.
+A:rural
+
+Q:The majority of money that funds county governments comes from ______.
+A:property taxes paid by citizens living inside cities
+
+Q:In order to pass specific ordinances, county governments must ______.
+A:seek legislative approval
+
+Q:If counties in Texas were given the same power of county
+rule as most Texas cities have, the counties would be able to adopt any form of county government not forbidden by law.
+A:home
+
+Q:Rural Texans often rely on volunteer fire departments because ______.
+A:counties are not permitted to operate fire departments
+
+Q:The primary reason special districts are created is ______.
+A:to provide services when no other unit of government does
+
+Q:Taxes to fund the functions of county government are paid mostly by whom?
+A:citizens living in cities within the county
+
+Q:Which of the following statements are true about the Texas Association of Counties (TAC)?
+A:The TAC represents elected county officials.
+The TAC is a politically powerful group.
+The TAC has fought diligently against home rule for Texas counties.
+
+Q:What was the primary reason that MUDs were created?
+A:counties' inability to provide certain services to areas outside cities
+
+Q:Which of the following are an example of a special purpose district?
+A:municipal utility districts
+
+Q:Special districts in Texas can increase which tax burden on citizens?
+A:property tax
+
+Q:True or false: County governments lack the general authority to pass ordinances.
+A:True
+
+Q:The administration of public education in Texas is largely the responsibility of ______.
+A:independent school districts
+
+Q:From the following, select the accurate statements about county government.
+A:Many states have modernized their county governments in the recent past.
+Texas has refused to make major changes to county governments in the recent past.
+
+Q:The Gulf Coast Waste Disposal authority is an example of ______.
+A:a MUD
+
+Q:Which of the following is more likely to have a board of directors that voters elect?
+A:a single-county special purpose district
+
+Q:In what areas are schools most strictly subject to state control?
+A:financing
+curriculum
+
+Q:The professionalism that is exhibited in most major Texas city governments that is often lacking in county and other units of local government can be attributed to which of the following?
+A:the council-manager form of government
+
+Q:Special districts are often called shadow governments because ______.
+A:they operate out of the view of most citizens
+
+Q:If counties in Texas were given the same power of county
+rule as most Texas cities have, the counties would be able to adopt any form of county government not forbidden by law.
+A:home
+
+Q:In Texas, the principal provider of local services are ______ governments.
+A:city
+
+Q:The school district superintendent is responsible for which of the following duties?
+A:reporting to elected officials
+annual performance appraisals
+operation of education programs
+
+Q:Which of the following are characteristics of the council-manager form of city government that is widely used in Texas?
+A:efficiency
+economy
+professionalism
+
